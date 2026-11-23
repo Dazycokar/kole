@@ -172,8 +172,8 @@ h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.3rem
 .card .photo img { transition: opacity 0.9s var(--ease), transform 1.4s var(--ease); }
 .card:hover .photo.is-loaded img, .card:focus-within .photo.is-loaded img { transform: scale(1.07); }
 .card-shade { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(10, 12, 22, 0.28) 0%, rgba(10, 12, 22, 0) 30%, rgba(10, 12, 22, 0.86) 100%); transition: opacity 0.5s; }
-.card-top { position: absolute; z-index: 2; top: 16px; left: 16px; right: 16px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.go { margin-left: auto; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: #12151f; font-size: 1.1rem; transition: transform 0.5s var(--ease), background 0.3s; }
+.card-top { position: absolute; z-index: 4; top: 16px; left: 16px; right: 16px; padding-right: 92px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.go { position: absolute; top: 0; right: 0; margin-left: 0; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: #12151f; font-size: 1.1rem; transition: transform 0.5s var(--ease), background 0.3s; }
 .card:hover .go, .card:focus-within .go { transform: rotate(45deg); background: var(--accent); }
 .card-body { position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; padding: 22px; }
 .card h3 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.8rem, 2.8vw, 2.5rem); line-height: 1; letter-spacing: -0.03em; text-wrap: balance; }
@@ -652,7 +652,7 @@ a.card-hit { display: block; }
 @media (max-width: 700px) { .kstats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 20px; } }
 
 /* ===================== Kolé v2: cards ===================== */
-.card-save { position: absolute; z-index: 4; top: 14px; right: 62px; }
+.card-save { position: absolute; z-index: 4; top: 16px; right: 62px; }
 .save { width: 40px; height: 40px; display: inline-grid; place-items: center; padding: 0; border-radius: 50%; border: 1px solid rgba(255,255,255,0.45); background: rgba(255,255,255,0.2); color: #fff; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: transform 0.3s var(--ease), background 0.25s, color 0.25s; }
 .save:hover { transform: scale(1.1); }
 .save.on { background: var(--accent); border-color: var(--accent); color: #12151f; }
