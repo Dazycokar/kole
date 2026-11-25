@@ -72,31 +72,24 @@ function answerFromListing(p: Property, question: string): string | null {
   return null;
 }
 
-/** Answer from confirmed listing facts first, then use Azure OpenAI if configured. */
+function fallbackReply(p: Property, question: string): string {
+  const faq = answerFromListing(p, question);
+  if (faq) return faq;
+  const greeting = question.toLowerCase().replace(/[^a-z0-9\s]/g, " ").trim().replace(/\s+/g, " ");
+  if (/^(hi|hello|hey|hiya|howdy|good morning|good afternoon|good evening)( there)?( kole)?$/.test(greeting)) {
+    return `Hi! I’m ${ASSISTANT}. I can help with details about ${p.title}, including the price, location, features and viewing options. What would you like to know?`;
+  }
+  return HUMAN_FOLLOW_UP;
+}
+
+/** Keep the assistant in the conversation until a staff member replies. */
 export async function respondToClient(p: Property, history: Pick<Message, "senderRole" | "body">[]): Promise<string> {
   const question = history[history.length - 1]?.body.trim() ?? "";
   if (!question) return "Thanks for sharing that. The Kolé team will review it and follow up here.";
-  const faq = answerFromListing(p, question);
-  if (faq) return faq;
 
-  const endpoint = process.env.AZURE_OPENAI_ENDPOINT?.trim();
-  const key = process.env.AZURE_OPENAI_API_KEY;
-  const deployment = process.env.AZURE_OPENAI_DEPLOYMENT?.trim();
-  if (!endpoint || !key || !deployment) return HUMAN_FOLLOW_UP;
-
-  let url: URL;
-  try {
-    url = new URL(endpoint);
-  } catch {
-    console.error("Azure OpenAI chat reply is disabled: AZURE_OPENAI_ENDPOINT is not a valid URL.");
-    return HUMAN_FOLLOW_UP;
-  }
-  if (url.protocol !== "https:") {
-    console.error("Azure OpenAI chat reply is disabled: AZURE_OPENAI_ENDPOINT must use HTTPS.");
-    return HUMAN_FOLLOW_UP;
-  }
-  const apiVersion = process.env.AZURE_OPENAI_API_VERSION?.trim() || "2024-10-21";
-  const apiUrl = `${url.toString().replace(/\/$/, "")}/openai/deployments/${encodeURIComponent(deployment)}/chat/completions?api-version=${encodeURIComponent(apiVersion)}`;
+  const key = process.env.OPENAI_API_KEY?.trim();
+  if (!key) return fallbackReply(p, question);
+  const model = process.env.OPENAI_MODEL?.trim() || "gpt-4o-mini";
   const listing = {
     title: p.title,
     type: p.type,
@@ -128,26 +121,26 @@ export async function respondToClient(p: Property, history: Pick<Message, "sende
   ];
 
   try {
-    const response = await fetch(apiUrl, {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "api-key": key },
-      body: JSON.stringify({ messages, max_tokens: 180, temperature: 0.2 }),
-      signal: AbortSignal.timeout(5_000),
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+      body: JSON.stringify({ model, messages, max_tokens: 180, temperature: 0.2 }),
+      signal: AbortSignal.timeout(8_000),
     });
     if (!response.ok) {
-      console.error(`Azure OpenAI chat reply returned HTTP ${response.status}.`);
-      return HUMAN_FOLLOW_UP;
+      console.error(`OpenAI chat reply returned HTTP ${response.status}.`);
+      return fallbackReply(p, question);
     }
     const payload = (await response.json()) as { choices?: { message?: { content?: unknown } }[] };
     const content = payload.choices?.[0]?.message?.content;
     if (typeof content !== "string" || !content.trim()) {
-      console.error("Azure OpenAI chat reply did not contain a message.");
-      return HUMAN_FOLLOW_UP;
+      console.error("OpenAI chat reply did not contain a message.");
+      return fallbackReply(p, question);
     }
     return content.trim().slice(0, 1200);
   } catch (error) {
-    console.error("Azure OpenAI chat reply request failed.", error);
-    return HUMAN_FOLLOW_UP;
+    console.error("OpenAI chat reply request failed.", error);
+    return fallbackReply(p, question);
   }
 }
 
