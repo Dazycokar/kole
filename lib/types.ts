@@ -23,13 +23,10 @@ export interface User {
   countryCode?: string;
   /** Agents: the Kolé team they work in. */
   teamId?: string;
-<<<<<<< HEAD
   /** Agents: last time their inbox was open (the apps and website ping it). */
   lastSeen?: string;
   /** Agents: switched to Away, so new chats skip them even while the app is open. */
   away?: boolean;
-=======
->>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
   /** Developer partners only: private contact for the Kolé team. Never shown to buyers. */
   contactEmail?: string;
   status: UserStatus;
@@ -113,7 +110,6 @@ export interface Team {
   createdAt: string;
 }
 
-<<<<<<< HEAD
 /** A file shared in a conversation. The bytes live in kole_files / the uploads folder, never in the public bucket. */
 export interface Attachment {
   file: string;
@@ -122,22 +118,18 @@ export interface Attachment {
   size: number;
 }
 
-=======
->>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
 export interface Message {
   id: string;
   threadId: string;
   senderId: string;
-<<<<<<< HEAD
   /** "system" is the Kolé assistant's automatic note. */
   senderRole: "client" | "staff" | "system";
   attachments?: Attachment[];
-=======
-  senderRole: "client" | "staff";
->>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
   /** Who wrote it, as they were named at the time. */
   agentName?: string;
   teamName?: string;
+  /** Client message that triggered an automatic assistant reply. */
+  replyToId?: string;
   body: string;
   createdAt: string;
 }
@@ -200,7 +192,6 @@ export interface ThreadSummary {
   updatedAt: string;
 }
 
-<<<<<<< HEAD
 export interface ChatAttachment extends Attachment {
   /** Signed link that works for an hour, so images and downloads open without any headers. */
   url: string;
@@ -210,8 +201,4 @@ export interface ChatAttachment extends Attachment {
 export interface ChatMessage extends Omit<Message, "attachments"> {
   senderName: string;
   attachments?: ChatAttachment[];
-=======
-export interface ChatMessage extends Message {
-  senderName: string;
->>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
 }

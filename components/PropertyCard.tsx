@@ -52,13 +52,7 @@ export default function PropertyCard({ p, sizes, saved = false, rank }: { p: Pro
           {p.area}, {p.city}
         </p>
         <p className="facts">{factsLine(p)}</p>
-<<<<<<< HEAD
         <p className="has3d">{[p.verified ? "✓ Docs checked" : "", p.videos?.length ? "Video" : "", p.panorama ? "360° tour" : ""].filter(Boolean).join(" · ") || "\u00a0"}</p>
-=======
-        {(p.panorama || p.verified || p.videos?.length) && (
-          <p className="has3d">{[p.verified ? "✓ Docs checked" : "", p.videos?.length ? "Video" : "", p.panorama ? "360° tour" : ""].filter(Boolean).join(" · ")}</p>
-        )}
->>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
       </div>
       <Link href={`/properties/${p.id}`} className="card-hit" aria-label={`View ${p.title}`} />
     </article>

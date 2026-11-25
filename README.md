@@ -73,13 +73,12 @@ Admin, then Teams: create teams (for example "Ikoyi Desk", "Abuja Desk"), list t
 ## Mobile app
 
 The React Native buyer app is in the separate `kole-mobile` folder (Expo SDK 58). It uses `/api/properties`, `/api/auth/*` (token login), `/api/saved` and the chat routes of this site. Send `Authorization: Bearer <token>`; the login and sign-up responses include the token.
-<<<<<<< HEAD
 
 ## Chat: automatic reply, online routing and files
 
 - A new chat gets an automatic "Kolé assistant" message first. If a team has someone online it says so; if nobody is online it says the team will reply when back (set the hours it quotes with `KOLE_HOURS`).
+- Before a team member has replied, the assistant answers common questions from confirmed listing details and uses Azure OpenAI for other questions when configured. It stops auto-answering once a team member replies. Without Azure OpenAI settings, questions it cannot confirm are passed to the team.
+- To enable the AI fallback, set `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY` and `AZURE_OPENAI_DEPLOYMENT` (optionally `AZURE_OPENAI_API_VERSION`) in your server environment. When enabled, client message text and relevant listing details are sent to your Azure OpenAI resource. Keep the key server-side; never add it to client code.
 - New chats go to a team that has an agent online right now (a team covering the property's area is preferred). Until a person from the team has replied, a chat sitting with an offline team moves to a team that comes online, and the assistant says so.
 - An agent counts as online while the website inbox or the Team app is open (a ping every 25 s; 75 s of silence = offline). Agents can switch Online/Away on the Messages page or in the Team app's Me tab.
 - Clients and the team can send photos, PDF, Word, Excel, PowerPoint, TXT and CSV (up to 5 per message, 4 MB each on Vercel). Files are checked by content, stored in the database/uploads folder (not the public bucket) and opened through links that expire after an hour.
-=======
->>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
