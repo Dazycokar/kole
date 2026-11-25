@@ -9,6 +9,8 @@ npm install
 npm run dev        # http://localhost:3000
 ```
 
+For local environment variables, copy `.env.example` to `.env.local` in the project root and fill in the values you use. Restart `npm run dev` after changing `.env.local`; the server reads several settings, including database configuration, when it starts. `.env.local` is ignored by Git and is not deployed to Vercel. For Vercel, set variables in the project's **Settings > Environment Variables**, then redeploy.
+
 For production: `npm run build` then `npm start`.
 
 ## Who can do what

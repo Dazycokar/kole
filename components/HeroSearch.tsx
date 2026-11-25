@@ -94,44 +94,43 @@ export default function HeroSearch() {
       </div>
       <div className="hs-row">
         <div className="hs-q">
-        <label>
-          <span className="sr">Search by area, street or keyword</span>
-          <input
-            value={q}
-            onChange={(e) => { setQ(e.target.value); setOpen(true); }}
-            onFocus={() => setOpen(true)}
-            onKeyDown={(e) => {
-              if (e.key === "ArrowDown") { e.preventDefault(); setOpen(true); setCursor((c) => Math.min(hits.length - 1, c + 1)); }
-              if (e.key === "ArrowUp") { e.preventDefault(); setCursor((c) => Math.max(-1, c - 1)); }
-              if (e.key === "Escape") setOpen(false);
-            }}
-            placeholder="Try Ikoyi, Maitama, penthouse, pool…"
-            autoComplete="off"
-            role="combobox"
-            aria-expanded={showList}
-            aria-controls="hs-list"
-          />
-        </label>
-              {showList && (
-        <ul className="hs-list" id="hs-list" role="listbox">
-          {hits.map((h, n) => (
-            <li key={h.id} role="option" aria-selected={n === cursor}>
-              <Link href={`/properties/${h.id}`} className={n === cursor ? "cur" : undefined}>
-                <span className="hs-th">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  {h.photo && <img src={sized(h.photo, 160)} alt="" loading="lazy" />}
-                </span>
-                <span className="hs-t">
-                  <b>{h.title}</b>
-                  <small>{h.area}, {h.city} · {h.type === "land" ? "Land" : h.purpose === "rent" ? "For rent" : "For sale"}</small>
-                </span>
-                <span className="hs-p">{nairaShort(h.price)}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-
+          <label className="hs-f">
+            <span>Search</span>
+            <input
+              value={q}
+              onChange={(e) => { setQ(e.target.value); setOpen(true); }}
+              onFocus={() => setOpen(true)}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowDown") { e.preventDefault(); setOpen(true); setCursor((c) => Math.min(hits.length - 1, c + 1)); }
+                if (e.key === "ArrowUp") { e.preventDefault(); setCursor((c) => Math.max(-1, c - 1)); }
+                if (e.key === "Escape") setOpen(false);
+              }}
+              placeholder="Try Ikoyi, Maitama, penthouse, pool…"
+              autoComplete="off"
+              role="combobox"
+              aria-expanded={showList}
+              aria-controls="hs-list"
+            />
+          </label>
+          {showList && (
+            <ul className="hs-list" id="hs-list" role="listbox">
+              {hits.map((h, n) => (
+                <li key={h.id} role="option" aria-selected={n === cursor}>
+                  <Link href={`/properties/${h.id}`} className={n === cursor ? "cur" : undefined}>
+                    <span className="hs-th">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      {h.photo && <img src={sized(h.photo, 160)} alt="" loading="lazy" />}
+                    </span>
+                    <span className="hs-t">
+                      <b>{h.title}</b>
+                      <small>{h.area}, {h.city} · {h.type === "land" ? "Land" : h.purpose === "rent" ? "For rent" : "For sale"}</small>
+                    </span>
+                    <span className="hs-p">{nairaShort(h.price)}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <label className="hs-f">
           <span>City</span>
