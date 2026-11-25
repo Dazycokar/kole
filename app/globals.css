@@ -222,8 +222,8 @@ h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.3rem
 .contact-inner { position: relative; z-index: 2; width: 100%; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 28px; padding: clamp(22px, 4vw, 56px); }
 .contact-inner h2 { font-size: clamp(3rem, 9vw, 7rem); line-height: 0.9; }
 .contact-inner h2 span { color: var(--accent); }
-.contact-side { flex: 0 1 380px; }
-.contact-side p { margin-bottom: 18px; opacity: 0.9; }
+.contact-frame .contact-side { flex: 0 1 380px; }
+.contact-frame .contact-side p { margin-bottom: 18px; opacity: 0.9; }
 .foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 22px 28px; color: var(--muted); font-size: 0.88rem; }
 .toast { position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 70; padding: 11px 18px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-weight: 600; animation: rise 0.4s var(--ease) both; }
 
@@ -867,11 +867,11 @@ a.card-hit { display: block; }
 
 /* Contact */
 .contact-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 24px; align-items: start; }
-.contact-side { padding: 28px; border-radius: 28px; background: var(--surface); border: 1px solid var(--line); }
-.contact-side h2 { font-size: 1.3rem; margin: 0 0 14px; }
-.contact-side dt { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-top: 14px; }
-.contact-side dd { margin: 4px 0 0; font-weight: 600; overflow-wrap: anywhere; }
-.contact-side a { color: var(--accent); text-decoration: underline; }
+.contact-grid .contact-side { padding: 28px; border-radius: 28px; background: var(--surface); border: 1px solid var(--line); }
+.contact-grid .contact-side h2 { font-size: 1.3rem; margin: 0 0 14px; }
+.contact-grid .contact-side dt { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-top: 14px; }
+.contact-grid .contact-side dd { margin: 4px 0 0; font-weight: 600; overflow-wrap: anywhere; }
+.contact-grid .contact-side a { color: var(--accent); text-decoration: underline; }
 @media (max-width: 820px) { .contact-grid { grid-template-columns: minmax(0, 1fr); } }
 
 /* ===================== Sign-up and login ===================== */
