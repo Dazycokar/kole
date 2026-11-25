@@ -43,7 +43,7 @@ Tip for clear videos: export from your phone or editor as MP4 (H.264), 1080p, la
 
 ## Email (SMTP)
 
-Set `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` and `CONTACT_TO` (see `.env.example`). Messages from the Contact page (website and app) are always saved in Admin, then Contact, and are also emailed to `CONTACT_TO`; the sender gets a short receipt. With no `SMTP_HOST` the site still works and just skips the email. Contact details on the page come from `CONTACT_EMAIL`, `CONTACT_PHONE`, `CONTACT_WHATSAPP` and `CONTACT_ADDRESS`.
+Set `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` and `CONTACT_TO` (see `.env.example`). Messages from the Contact page (website and app) are always saved in Admin, then Contact, and are also emailed to `CONTACT_TO`; the sender gets a short receipt. With no `SMTP_HOST` the site still works and just skips the email. Contact details and office hours on the page come from `CONTACT_EMAIL`, `CONTACT_PHONE`, `CONTACT_WHATSAPP`, `CONTACT_ADDRESS` and `CONTACT_HOURS`.
 
 ## Deploy on Vercel
 

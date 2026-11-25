@@ -10,7 +10,7 @@ export default function Contact({ searchParams }: { searchParams: { topic?: stri
   const whatsapp = process.env.CONTACT_WHATSAPP?.replace(/[^\d]/g, "");
   const email = process.env.CONTACT_EMAIL || process.env.CONTACT_TO || process.env.ADMIN_EMAIL;
   const address = process.env.CONTACT_ADDRESS;
-  const hours = process.env.CONTACT_HOURS || "Monday to Saturday, 9am to 6pm (Lagos time)";
+  const hours = process.env.CONTACT_HOURS || "Monday to Friday, 9am to 6pm (Lagos time)";
   return (
     <main className="page" id="top">
       <div className="wrap">
