@@ -151,6 +151,7 @@ export default function AuthForm({ mode, next }: Props) {
         )}
         {show("password") && <small className="field-err" role="alert">{show("password")}</small>}
       </div>
+      {!register && <p className="form-alt"><Link href="/forgot-password">Forgot your password?</Link></p>}
 
       {error && <p className="form-error form-error big" role="alert">{error}</p>}
 

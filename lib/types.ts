@@ -27,13 +27,15 @@ export interface User {
   lastSeen?: string;
   /** Agents: switched to Away, so new chats skip them even while the app is open. */
   away?: boolean;
+  /** Incremented to revoke existing sessions after a password reset. */
+  authVersion?: number;
   /** Developer partners only: private contact for the Kolé team. Never shown to buyers. */
   contactEmail?: string;
   status: UserStatus;
   demo?: boolean;
   createdAt: string;
 }
-export type PublicUser = Omit<User, "passwordHash">;
+export type PublicUser = Omit<User, "passwordHash" | "authVersion">;
 
 export type PropType = "house" | "land";
 export type Purpose = "sale" | "rent";
@@ -144,6 +146,13 @@ export interface Db {
   saves: Save[];
   partnerRequests: PartnerRequest[];
   contacts: ContactMessage[];
+  passwordResets?: PasswordReset[];
+}
+
+export interface PasswordReset {
+  userId: string;
+  tokenHash: string;
+  expiresAt: string;
 }
 
 export interface ContactMessage {

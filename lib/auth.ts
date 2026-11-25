@@ -12,7 +12,8 @@ function sign(payload: string, secret: string) {
 
 export async function makeToken(userId: string): Promise<string> {
   const db = await readDb();
-  const payload = Buffer.from(JSON.stringify({ u: userId, e: Date.now() + MAX_AGE_DAYS * 86400000 })).toString("base64url");
+  const user = db.users.find((u) => u.id === userId);
+  const payload = Buffer.from(JSON.stringify({ u: userId, e: Date.now() + MAX_AGE_DAYS * 86400000, v: user?.authVersion ?? 0 })).toString("base64url");
   return `${payload}.${sign(payload, db.meta.secret)}`;
 }
 
@@ -30,14 +31,15 @@ export async function userFromToken(token: string | undefined): Promise<User | n
   if (!payload || !sig) return null;
   const db = await readDb();
   const expected = sign(payload, db.meta.secret);
-  const a = Buffer.from(sig);
-  const b = Buffer.from(expected);
+  const a = Uint8Array.from(Buffer.from(sig));
+  const b = Uint8Array.from(Buffer.from(expected));
   if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;
   try {
-    const data = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { u: string; e: number };
+    const data = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { u: string; e: number; v?: number };
     if (!data.u || data.e < Date.now()) return null;
     const user = db.users.find((u) => u.id === data.u);
     if (!user || user.status === "suspended" || user.role === "developer") return null;
+    if ((data.v ?? 0) !== (user.authVersion ?? 0)) return null;
     return user;
   } catch {
     return null;
@@ -52,8 +54,9 @@ export async function getUser(): Promise<User | null> {
 }
 
 export function publicUser(u: User): PublicUser {
-  const { passwordHash: _hash, ...rest } = u;
+  const { passwordHash: _hash, authVersion: _version, ...rest } = u;
   void _hash;
+  void _version;
   return rest;
 }
 

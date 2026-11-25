@@ -98,6 +98,7 @@ function normalise(db: Db): Db {
   db.partnerRequests ??= [];
   db.teams ??= [];
   db.contacts ??= [];
+  db.passwordResets ??= [];
   return db;
 }
 

@@ -50,12 +50,15 @@ The "Application error ... Digest" page on Vercel came from the site trying to w
 1. Do the Supabase steps above.
 2. In Vercel, Settings, then Environment Variables, add everything from `.env.example` that you use (at least `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and the SMTP ones).
 3. Redeploy. The tables and sample listings are created on the first visit.
+4. Set `SITE_URL` to your public HTTPS domain to use email-based password resets.
 
 Photos are shrunk in the browser before upload; videos are not touched, so they keep their full quality.
 
 ## Sign-up and login
 
 Sign-up asks for name, email, **country** (searchable list with flags, pre-filled from the visitor's browser region), an optional **phone number with a country-code selector** (formatted as you type and checked for the chosen country), and a password with a strength bar and show/hide. Phones are stored in one standard form (for example `+2348012345678`) and the country is saved with its ISO code. The same fields are in the buyer app and in the profile form on the buyer dashboard. The country list is in `lib/countries.ts`, phone checks use `libphonenumber-js`.
+
+Use **Forgot your password?** on the login page to request a reset email. Reset links expire after 30 minutes and can be used once; changing the password signs out other sessions. Password resets are currently for buyer/client accounts and require SMTP settings plus `SITE_URL`.
 
 ## 3D, video and 360
 
@@ -82,3 +85,4 @@ The React Native buyer app is in the separate `kole-mobile` folder (Expo SDK 58)
 - New chats go to a team that has an agent online right now (a team covering the property's area is preferred). Until a person from the team has replied, a chat sitting with an offline team moves to a team that comes online, and the assistant says so.
 - An agent counts as online while the website inbox or the Team app is open (a ping every 25 s; 75 s of silence = offline). Agents can switch Online/Away on the Messages page or in the Team app's Me tab.
 - Clients and the team can send photos, PDF, Word, Excel, PowerPoint, TXT and CSV (up to 5 per message, 4 MB each on Vercel). Files are checked by content, stored in the database/uploads folder (not the public bucket) and opened through links that expire after an hour.
+- Clients can permanently delete a conversation from their Messages page. This removes its messages from the team/admin history too; attachments no longer referenced by another message are deleted as well.

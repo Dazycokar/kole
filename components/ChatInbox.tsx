@@ -15,6 +15,8 @@ export default function ChatInbox({ mode, initialThreadId }: Props) {
   const [threads, setThreads] = useState<ThreadSummary[] | null>(null);
   const [selected, setSelected] = useState<string | null>(initialThreadId ?? null);
   const [error, setError] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -56,6 +58,28 @@ export default function ChatInbox({ mode, initialThreadId }: Props) {
     const r = await fetch("/api/chat/presence", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ available }) });
     const j = await r.json().catch(() => null);
     if (j?.ok) setAvail(j);
+  }
+
+  async function deleteConversation() {
+    if (mode !== "client" || !selected || deleting) return;
+    if (!window.confirm("Permanently delete this conversation and all its messages, including from the Kolé team? This cannot be undone.")) return;
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      const r = await fetch(`/api/chat/threads/${selected}`, { method: "DELETE" });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        setDeleteError(j.error || "Could not delete this conversation.");
+        return;
+      }
+      setThreads((list) => list?.filter((thread) => thread.id !== selected) ?? null);
+      setSelected(null);
+      setError(j.warning || null);
+    } catch {
+      setDeleteError("Could not reach the server. Check your connection.");
+    } finally {
+      setDeleting(false);
+    }
   }
 
   const current = threads?.find((t) => t.id === selected);
@@ -118,9 +142,17 @@ export default function ChatInbox({ mode, initialThreadId }: Props) {
       <section className="inbox-pane" aria-label="Conversation">
         {selected && current ? (
           <>
-            <button type="button" className="inbox-back btn plain" onClick={() => setSelected(null)}>
-              ← All conversations
-            </button>
+            <div className="inbox-toolbar">
+              <button type="button" className="inbox-back btn plain" onClick={() => setSelected(null)}>
+                ← All conversations
+              </button>
+              {mode === "client" && (
+                <button type="button" className="btn danger small" onClick={deleteConversation} disabled={deleting}>
+                  {deleting ? "Deleting…" : "Delete conversation"}
+                </button>
+              )}
+            </div>
+            {deleteError && <p className="form-error" role="alert">{deleteError}</p>}
             <Conversation key={selected} threadId={selected} viewer={mode} />
           </>
         ) : (

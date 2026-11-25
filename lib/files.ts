@@ -13,7 +13,7 @@ export async function saveFile(name: string, buf: Buffer): Promise<void> {
   }
   const dir = path.join(DATA_DIR, "uploads");
   await fs.mkdir(dir, { recursive: true });
-  await fs.writeFile(path.join(dir, name), buf);
+  await fs.writeFile(path.join(dir, name), Uint8Array.from(buf));
 }
 
 export async function loadFile(name: string): Promise<{ data: Buffer; mime: string } | null> {
@@ -26,6 +26,19 @@ export async function loadFile(name: string): Promise<{ data: Buffer; mime: stri
     return { data: await fs.readFile(path.join(DATA_DIR, "uploads", name)), mime: MIME[ext] };
   } catch {
     return null;
+  }
+}
+
+export async function deleteFile(name: string): Promise<void> {
+  if (!name || path.basename(name) !== name) throw new Error("Invalid stored file name.");
+  if (storageMode === "postgres") {
+    await pgPool().query("DELETE FROM kole_files WHERE id = $1", [name]);
+    return;
+  }
+  try {
+    await fs.unlink(path.join(DATA_DIR, "uploads", name));
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
   }
 }
 

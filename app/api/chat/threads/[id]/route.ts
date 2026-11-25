@@ -1,6 +1,7 @@
 import { newId } from "@/lib/ids";
 import { NextRequest } from "next/server";
 import { mutate, readDb } from "@/lib/db";
+import { deleteFile } from "@/lib/files";
 import { getUser, isAdmin } from "@/lib/auth";
 import { staffCanSee } from "@/lib/queries";
 import { teamOnline, touchPresence } from "@/lib/presence";
@@ -159,4 +160,33 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
   if (result.status === 404) return err("Conversation not found.", 404);
   if (result.status === 400) return err("That team does not exist.");
   return ok(result.view);
+}
+
+export async function DELETE(req: NextRequest, { params }: Ctx) {
+  if (!sameOrigin(req)) return err("Request blocked.", 403);
+  const user = await getUser();
+  if (!user) return err("Log in first.", 401);
+  if (user.role !== "client") return err("Only clients can delete their conversations.", 403);
+
+  const result = await mutate((db) => {
+    const index = db.threads.findIndex((thread) => thread.id === params.id && thread.clientId === user.id);
+    if (index < 0) return null;
+    const thread = db.threads[index];
+    const removed = db.messages.filter((message) => message.threadId === thread.id);
+    const remaining = db.messages.filter((message) => message.threadId !== thread.id);
+    const files = [...new Set(removed.flatMap((message) => message.attachments?.map((attachment) => attachment.file) ?? []))]
+      .filter((file) => !remaining.some((message) => message.attachments?.some((attachment) => attachment.file === file)));
+    db.messages = remaining;
+    db.threads.splice(index, 1);
+    return { files };
+  });
+  if (!result) return err("Conversation not found.", 404);
+
+  const cleanup = await Promise.allSettled(result.files.map(deleteFile));
+  const cleanupFailed = cleanup.some((item) => item.status === "rejected");
+  if (cleanupFailed) console.error("[chat-delete] One or more conversation attachments could not be removed.");
+  return ok({
+    deleted: true,
+    warning: cleanupFailed ? "The conversation was deleted, but some attachments could not be removed." : undefined,
+  });
 }
