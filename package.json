@@ -8,6 +8,11 @@
     "start": "next start"
   },
   "dependencies": {
+<<<<<<< HEAD
+=======
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.2",
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
     "libphonenumber-js": "^1.13.17",
     "next": "14.2.35",
     "nodemailer": "^6.10.1",

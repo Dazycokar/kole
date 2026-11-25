@@ -73,6 +73,7 @@ Admin, then Teams: create teams (for example "Ikoyi Desk", "Abuja Desk"), list t
 ## Mobile app
 
 The React Native buyer app is in the separate `kole-mobile` folder (Expo SDK 58). It uses `/api/properties`, `/api/auth/*` (token login), `/api/saved` and the chat routes of this site. Send `Authorization: Bearer <token>`; the login and sign-up responses include the token.
+<<<<<<< HEAD
 
 ## Chat: automatic reply, online routing and files
 
@@ -80,3 +81,5 @@ The React Native buyer app is in the separate `kole-mobile` folder (Expo SDK 58)
 - New chats go to a team that has an agent online right now (a team covering the property's area is preferred). Until a person from the team has replied, a chat sitting with an offline team moves to a team that comes online, and the assistant says so.
 - An agent counts as online while the website inbox or the Team app is open (a ping every 25 s; 75 s of silence = offline). Agents can switch Online/Away on the Messages page or in the Team app's Me tab.
 - Clients and the team can send photos, PDF, Word, Excel, PowerPoint, TXT and CSV (up to 5 per message, 4 MB each on Vercel). Files are checked by content, stored in the database/uploads folder (not the public bucket) and opened through links that expire after an hour.
+=======
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb

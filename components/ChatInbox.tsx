@@ -44,6 +44,7 @@ export default function ChatInbox({ mode, initialThreadId }: Props) {
     if (!selected && threads?.length && window.matchMedia("(min-width: 900px)").matches) setSelected(threads[0].id);
   }, [threads, selected]);
 
+<<<<<<< HEAD
   const [avail, setAvail] = useState<{ agent: boolean; available: boolean; online: boolean } | null>(null);
   useEffect(() => {
     if (mode !== "staff") return;
@@ -58,17 +59,22 @@ export default function ChatInbox({ mode, initialThreadId }: Props) {
     if (j?.ok) setAvail(j);
   }
 
+=======
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
   const current = threads?.find((t) => t.id === selected);
 
   return (
     <div className={`inbox${selected ? " has-selection" : ""}`}>
       <aside className="inbox-list" aria-label="Conversations">
+<<<<<<< HEAD
         {mode === "staff" && avail?.agent && (
           <div className="avail">
             <span className={`presence${avail.available ? " on" : ""}`}>{avail.available ? "You're online: new chats come to your team" : "You're away: new chats skip you"}</span>
             <button type="button" onClick={() => setAvailable(!avail.available)}>{avail.available ? "Go away" : "Go online"}</button>
           </div>
         )}
+=======
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
         {error && (
           <p className="form-error" role="alert">
             {error}

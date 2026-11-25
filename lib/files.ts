@@ -3,12 +3,20 @@ import { promises as fs } from "fs";
 import { DATA_DIR, pgPool, storageMode } from "./db";
 
 /** Where uploaded photos live: a Postgres table when a database is set, otherwise the data folder. */
+<<<<<<< HEAD
 export const MIME: Record<string, string> = { jpg: "image/jpeg", png: "image/png", webp: "image/webp", mp4: "video/mp4", webm: "video/webm", mov: "video/quicktime", gif: "image/gif", pdf: "application/pdf", txt: "text/plain", csv: "text/csv", doc: "application/msword", docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", xls: "application/vnd.ms-excel", xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ppt: "application/vnd.ms-powerpoint", pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation" };
+=======
+export const MIME: Record<string, string> = { jpg: "image/jpeg", png: "image/png", webp: "image/webp", mp4: "video/mp4", webm: "video/webm", mov: "video/quicktime" };
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
 
 export async function saveFile(name: string, buf: Buffer): Promise<void> {
   const ext = name.split(".").pop() ?? "jpg";
   if (storageMode === "postgres") {
+<<<<<<< HEAD
     await pgPool().query("INSERT INTO kole_files (id, mime, data) VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING", [name, MIME[ext] ?? "application/octet-stream", buf]);
+=======
+    await pgPool().query("INSERT INTO kole_files (id, mime, data) VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING", [name, MIME[ext], buf]);
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
     return;
   }
   const dir = path.join(DATA_DIR, "uploads");

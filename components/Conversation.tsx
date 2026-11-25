@@ -2,7 +2,11 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+<<<<<<< HEAD
 import type { Attachment, ChatMessage } from "@/lib/types";
+=======
+import type { ChatMessage } from "@/lib/types";
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
 import { clock } from "@/lib/format";
 import Photo from "./Photo";
 
@@ -10,12 +14,17 @@ interface View {
   property: { id: string; title: string; photo: string; area: string; developerName: string };
   counterpart: string;
   counterpartNote?: string;
+<<<<<<< HEAD
   team: { id: string; name: string; focus: string; online?: boolean } | null;
+=======
+  team: { id: string; name: string; focus: string } | null;
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
   canAssign?: boolean;
   teams?: { id: string; name: string }[];
   messages: ChatMessage[];
 }
 
+<<<<<<< HEAD
 type Pending = Attachment & { sig: string };
 const ACCEPT = "image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv";
 const size = (n: number) => (n >= 1048576 ? `${(n / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(n / 1024))} KB`);
@@ -40,6 +49,8 @@ async function shrinkImage(file: File, limit = 3.4 * 1024 * 1024): Promise<File>
   return file;
 }
 
+=======
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
 interface Props {
   threadId: string;
   viewer: "client" | "staff";
@@ -51,9 +62,12 @@ export default function Conversation({ threadId, viewer, suggestions = [], compa
   const [view, setView] = useState<View | null>(null);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
+<<<<<<< HEAD
   const [pending, setPending] = useState<Pending[]>([]);
   const [uploading, setUploading] = useState(0);
   const fileRef = useRef<HTMLInputElement>(null);
+=======
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
   const [error, setError] = useState<string | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -103,6 +117,7 @@ export default function Conversation({ threadId, viewer, suggestions = [], compa
     }
   }
 
+<<<<<<< HEAD
   async function pick(list: FileList | null) {
     if (!list?.length) return;
     const room = 5 - pending.length;
@@ -130,13 +145,22 @@ export default function Conversation({ threadId, viewer, suggestions = [], compa
   async function send(body: string) {
     const b = body.trim();
     if ((!b && !pending.length) || sending || uploading) return;
+=======
+  async function send(body: string) {
+    const b = body.trim();
+    if (!b || sending) return;
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
     setSending(true);
     setError(null);
     try {
       const r = await fetch(`/api/chat/threads/${threadId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+<<<<<<< HEAD
         body: JSON.stringify({ body: b, attachments: pending }),
+=======
+        body: JSON.stringify({ body: b }),
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
       });
       const j = await r.json().catch(() => ({}));
       if (!r.ok) {
@@ -145,7 +169,10 @@ export default function Conversation({ threadId, viewer, suggestions = [], compa
       }
       setView(j);
       setText("");
+<<<<<<< HEAD
       setPending([]);
+=======
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
     } catch {
       setError("Message not sent. Check your connection.");
     } finally {
@@ -176,8 +203,12 @@ export default function Conversation({ threadId, viewer, suggestions = [], compa
           {view.team ? (
             <>
               <span className="team-badge">{view.team.name}</span>
+<<<<<<< HEAD
               <span className={`presence${view.team.online ? " on" : ""}`}>{view.team.online ? "Online now" : "Offline, will reply when back"}</span>
               <span className="muted">{view.team.focus ? `${view.team.focus}.` : ""}</span>
+=======
+              <span className="muted">{view.team.focus ? `${view.team.focus}. ` : ""}This team is attending to you.</span>
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
             </>
           ) : (
             <span className="muted">The Kolé team will pick this up shortly.</span>
@@ -214,6 +245,7 @@ export default function Conversation({ threadId, viewer, suggestions = [], compa
         {view?.messages.map((m) => {
           const mine = m.senderRole === viewer;
           return (
+<<<<<<< HEAD
             <div key={m.id} className={`bubble${mine ? " mine" : ""}${m.senderRole === "system" ? " auto" : ""}`}>
               {!mine && (
                 <span className="b-name">
@@ -240,6 +272,16 @@ export default function Conversation({ threadId, viewer, suggestions = [], compa
                   )}
                 </div>
               )}
+=======
+            <div key={m.id} className={`bubble${mine ? " mine" : ""}`}>
+              {!mine && (
+                <span className="b-name">
+                  {m.senderName}
+                  {m.senderRole === "staff" && m.teamName && <span className="b-team"> · {m.teamName}</span>}
+                </span>
+              )}
+              <p>{m.body}</p>
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
               <span className="b-time">{clock(m.createdAt)}</span>
             </div>
           );
@@ -262,6 +304,7 @@ export default function Conversation({ threadId, viewer, suggestions = [], compa
         </p>
       )}
 
+<<<<<<< HEAD
       {(pending.length > 0 || uploading > 0) && (
         <div className="pending">
           {pending.map((a) => (
@@ -274,6 +317,8 @@ export default function Conversation({ threadId, viewer, suggestions = [], compa
         </div>
       )}
 
+=======
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
       <form
         className="convo-form"
         onSubmit={(e) => {
@@ -281,10 +326,13 @@ export default function Conversation({ threadId, viewer, suggestions = [], compa
           send(text);
         }}
       >
+<<<<<<< HEAD
         <input ref={fileRef} type="file" hidden multiple accept={ACCEPT} onChange={(e) => pick(e.target.files)} />
         <button type="button" className="attach" aria-label="Attach photos or files" title="Attach photos, documents or files" onClick={() => fileRef.current?.click()} disabled={!view || pending.length >= 5}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m21 11-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.9-8.9a3.7 3.7 0 0 1 5.2 5.2l-8.9 8.9a1.8 1.8 0 0 1-2.6-2.6l8.2-8.2" /></svg>
         </button>
+=======
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
         <textarea
           id={`msg-${threadId}`}
           aria-label="Your message"
@@ -300,7 +348,11 @@ export default function Conversation({ threadId, viewer, suggestions = [], compa
             }
           }}
         />
+<<<<<<< HEAD
         <button className="btn solid" type="submit" disabled={sending || !!uploading || (!text.trim() && !pending.length) || !view}>
+=======
+        <button className="btn solid" type="submit" disabled={sending || !text.trim() || !view}>
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
           Send
         </button>
       </form>

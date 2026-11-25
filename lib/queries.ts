@@ -1,5 +1,9 @@
 import type { Db, Property, Thread, ThreadSummary, User } from "./types";
 import { isStaff } from "./auth";
+<<<<<<< HEAD
+=======
+import type { Team } from "./types";
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
 
 export interface Filters {
   q?: string;
@@ -50,6 +54,21 @@ export function staffCanSee(user: User, t: Thread): boolean {
   return user.role === "agent" && !!user.teamId && t.teamId === user.teamId;
 }
 
+<<<<<<< HEAD
+=======
+/** Picks the team for a new enquiry: one that covers the property's area, otherwise the least busy. Only teams with an active agent qualify. */
+export function pickTeam(db: Db, p: { area: string; city: string }): string | undefined {
+  const open = db.teams.filter((t) => db.users.some((u) => u.role === "agent" && u.teamId === t.id && u.status === "active"));
+  if (!open.length) return undefined;
+  const area = p.area.trim().toLowerCase();
+  const city = p.city.trim().toLowerCase();
+  const covers = (t: Team) => t.areas.some((a) => a.toLowerCase() === area || a.toLowerCase() === city);
+  const pool = open.filter(covers).length ? open.filter(covers) : open;
+  const load = (t: Team) => db.threads.filter((x) => x.teamId === t.id).length;
+  return pool.slice().sort((a, b) => load(a) - load(b) || a.name.localeCompare(b.name))[0].id;
+}
+
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
 /** Chat threads the person is allowed to see. */
 export function threadsFor(db: Db, user: User): ThreadSummary[] {
   const staff = isStaff(user);
@@ -59,10 +78,17 @@ export function threadsFor(db: Db, user: User): ThreadSummary[] {
     if (!p) continue;
     const msgs = db.messages.filter((m) => m.threadId === t.id);
     if (staff) {
+<<<<<<< HEAD
       if (!msgs.some((m) => m.senderRole !== "system") || !staffCanSee(user, t)) continue;
     } else if (t.clientId !== user.id) continue;
 
     const last = staff ? msgs.filter((m) => m.senderRole !== "system").pop() : msgs[msgs.length - 1];
+=======
+      if (!msgs.length || !staffCanSee(user, t)) continue;
+    } else if (t.clientId !== user.id) continue;
+
+    const last = msgs[msgs.length - 1];
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
     const client = db.users.find((u) => u.id === t.clientId);
     const team = db.teams.find((x) => x.id === t.teamId);
     const unread = staff ? unreadFor(t, msgs, "staff") : unreadFor(t, msgs, "client");
@@ -76,7 +102,11 @@ export function threadsFor(db: Db, user: User): ThreadSummary[] {
       counterpartNote: staff ? client?.country : undefined,
       teamId: team?.id,
       teamName: team?.name,
+<<<<<<< HEAD
       lastMessage: last ? { body: last.body || (last.attachments?.length ? attachLabel(last.attachments) : ""), createdAt: last.createdAt, mine: staff ? last.senderRole === "staff" : last.senderRole === "client" } : null,
+=======
+      lastMessage: last ? { body: last.body, createdAt: last.createdAt, mine: staff ? last.senderRole === "staff" : last.senderRole === "client" } : null,
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
       unread,
       updatedAt: t.updatedAt,
     });
@@ -93,6 +123,7 @@ function unreadFor(t: Thread, msgs: { senderRole: string; createdAt: string }[],
 export function staffUnreadTotal(db: Db, user: User): number {
   return threadsFor(db, user).reduce((n, t) => n + t.unread, 0);
 }
+<<<<<<< HEAD
 
 export function attachLabel(a: { mime: string; name: string }[]): string {
   if (!a.length) return "";
@@ -100,3 +131,5 @@ export function attachLabel(a: { mime: string; name: string }[]): string {
   if (a.length === 1) return img ? "📷 Photo" : `📎 ${a[0].name}`;
   return img ? `📷 ${a.length} photos` : `📎 ${a.length} files`;
 }
+=======
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb

@@ -3,9 +3,12 @@ import { NextRequest } from "next/server";
 import { mutate, readDb } from "@/lib/db";
 import { getUser, isAdmin } from "@/lib/auth";
 import { staffCanSee } from "@/lib/queries";
+<<<<<<< HEAD
 import { teamOnline, touchPresence } from "@/lib/presence";
 import { ASSISTANT, rerouteIfNeeded } from "@/lib/assistant";
 import { checkAttachments, toChatAttachment } from "@/lib/chatfiles";
+=======
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
 import { err, ok, limited, readJson, sameOrigin, str } from "@/lib/http";
 import type { ChatMessage, Db, Message, Thread, User } from "@/lib/types";
 
@@ -29,8 +32,12 @@ function view(db: Db, t: Thread, side: "client" | "staff", viewer?: User) {
     .filter((m) => m.threadId === t.id)
     .map((m) => ({
       ...m,
+<<<<<<< HEAD
       attachments: m.attachments?.length ? m.attachments.map((a) => toChatAttachment(db, a)) : undefined,
       senderName: m.senderRole === "client" ? client?.name ?? "Client" : m.senderRole === "system" ? ASSISTANT : m.agentName || "Kolé team",
+=======
+      senderName: m.senderRole === "client" ? client?.name ?? "Client" : m.agentName || "Kolé team",
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
     }));
   const canAssign = side === "staff" && !!viewer && isAdmin(viewer);
   return {
@@ -38,7 +45,11 @@ function view(db: Db, t: Thread, side: "client" | "staff", viewer?: User) {
     property: { id: p.id, title: p.title, photo: p.photos[0] ?? "", area: `${p.area}, ${p.city}`, developerName: p.developerName },
     counterpart: side === "client" ? "Kolé" : client?.name ?? "Client",
     counterpartNote: side === "staff" ? client?.country : undefined,
+<<<<<<< HEAD
     team: team ? { id: team.id, name: team.name, focus: team.focus ?? "", online: teamOnline(db, team.id) } : null,
+=======
+    team: team ? { id: team.id, name: team.name, focus: team.focus ?? "" } : null,
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
     canAssign,
     teams: canAssign ? db.teams.map((x) => ({ id: x.id, name: x.name })) : undefined,
     messages,
@@ -48,7 +59,10 @@ function view(db: Db, t: Thread, side: "client" | "staff", viewer?: User) {
 export async function GET(_req: NextRequest, { params }: Ctx) {
   const user = await getUser();
   if (!user) return err("Log in first.", 401);
+<<<<<<< HEAD
   await touchPresence(user);
+=======
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
   const db = await readDb();
   const t = db.threads.find((x) => x.id === params.id);
   if (!t) return err("Conversation not found.", 404);
@@ -74,10 +88,14 @@ export async function POST(req: NextRequest, { params }: Ctx) {
   if (limited(`msg:${user.id}`, 40, 60_000)) return err("You are sending messages too fast. Slow down a little.", 429);
   const body = await readJson(req);
   const text = str(body?.body, 2000);
+<<<<<<< HEAD
   const dbNow = await readDb();
   const files = checkAttachments(dbNow, user.id, body?.attachments);
   if (!files) return err("One of the files could not be attached. Send it again.");
   if (!text && !files.length) return err("Write a message or attach a file first.");
+=======
+  if (!text) return err("Write a message first.");
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
 
   const result = await mutate((db) => {
     const t = db.threads.find((x) => x.id === params.id);
@@ -89,6 +107,7 @@ export async function POST(req: NextRequest, { params }: Ctx) {
     const m: Message = {
       id: newId(),
       threadId: t.id, senderId: user.id, senderRole: side, body: text, createdAt: now,
+<<<<<<< HEAD
       ...(files.length ? { attachments: files } : {}),
       ...(side === "staff" ? { agentName: user.role === "admin" ? "Kolé admin" : user.name, teamName: myTeam?.name } : {}),
     };
@@ -97,6 +116,11 @@ export async function POST(req: NextRequest, { params }: Ctx) {
       const p = db.properties.find((x) => x.id === t.propertyId);
       if (p) rerouteIfNeeded(db, t, p, new Date(Date.parse(now) + 1).toISOString());
     }
+=======
+      ...(side === "staff" ? { agentName: user.role === "admin" ? "Kolé admin" : user.name, teamName: myTeam?.name } : {}),
+    };
+    db.messages.push(m);
+>>>>>>> e3c4a13a10f944d9e0c0142390b1a4c1606f8fcb
     t.updatedAt = now;
     if (side === "client") t.clientReadAt = now;
     else t.staffReadAt = now;
