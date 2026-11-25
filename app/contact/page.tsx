@@ -32,7 +32,7 @@ export default function Contact({ searchParams }: { searchParams: { topic?: stri
               {address && <><dt>Office</dt><dd>{address}</dd></>}
               <dt>Hours</dt><dd>{hours}</dd>
             </dl>
-            {!email && !phone && !whatsapp && !address && <p className="muted small">Add CONTACT_EMAIL, CONTACT_PHONE, CONTACT_WHATSAPP and CONTACT_ADDRESS to your .env to show them here.</p>}
+            {/* {!email && !phone && !whatsapp && !address && <p className="muted small">Add CONTACT_EMAIL, CONTACT_PHONE, CONTACT_WHATSAPP and CONTACT_ADDRESS to your .env to show them here.</p>} */}
           </aside>
         </div>
       </div>
