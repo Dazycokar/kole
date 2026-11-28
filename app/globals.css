@@ -1,15 +1,15 @@
 /* Kolé. Layout: photo-first. A rounded full-bleed hero, a strip of project thumbnails, image-led cards that
    open into a drawer, then a split story and a photo contact block. Edit colours and fonts in the tokens. */
 :root {
-  --bg: #f1f2f7;
-  --surface: #ffffff;
-  --ink: #12151f;
-  --muted: #5b6275;
-  --line: #dee1ea;
-  --accent: #ff6a4d;
-  --accent-ink: #12151f;
-  --glass: rgba(255, 255, 255, 0.74);
-  --shadow: 0 24px 60px -28px rgba(18, 21, 31, 0.45);
+  --bg: #f5f2eb;
+  --surface: #fffdf8;
+  --ink: #20271f;
+  --muted: #70756b;
+  --line: #e4dfd3;
+  --accent: #b99559;
+  --accent-ink: #1c211a;
+  --glass: rgba(255, 253, 248, 0.86);
+  --shadow: 0 24px 60px -28px rgba(32, 39, 31, 0.28);
   --font-display: var(--ff-display), "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --font-body: var(--ff-body), system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--ff-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -17,24 +17,24 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0d1018;
-    --surface: #151925;
-    --ink: #f1f2f7;
-    --muted: #9aa1b4;
-    --line: #262b3a;
-    --glass: rgba(21, 25, 37, 0.72);
-    --shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.8);
+    --bg: #171a16;
+    --surface: #20241e;
+    --ink: #f4f0e7;
+    --muted: #aaa99d;
+    --line: #353a31;
+    --glass: rgba(32, 36, 30, 0.88);
+    --shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.65);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0d1018;
-  --surface: #151925;
-  --ink: #f1f2f7;
-  --muted: #9aa1b4;
-  --line: #262b3a;
-  --glass: rgba(21, 25, 37, 0.72);
-  --shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.8);
+  --bg: #171a16;
+  --surface: #20241e;
+  --ink: #f4f0e7;
+  --muted: #aaa99d;
+  --line: #353a31;
+  --glass: rgba(32, 36, 30, 0.88);
+  --shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.65);
   color-scheme: dark;
 }
 
@@ -967,3 +967,59 @@ a.card-hit { display: block; }
 .presence.on::before { background: #2aa876; box-shadow: 0 0 0 3px color-mix(in srgb, #2aa876 25%, transparent); }
 .avail { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: 0.9rem; }
 .avail button { padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-weight: 600; cursor: pointer; }
+
+/* ===================== Kolé: considered details ===================== */
+.btn.solid { box-shadow: 0 8px 20px -12px color-mix(in srgb, var(--accent) 80%, transparent); }
+.btn.solid:hover { background: var(--ink); color: var(--bg); }
+.nav-pill { border-color: color-mix(in srgb, var(--line) 75%, transparent); }
+.menu-list { z-index: 60; min-width: 230px; padding: 9px; border-radius: 18px; }
+.menu-list a, .menu-out { transition: background 0.2s ease, color 0.2s ease; }
+.menu-list a:hover, .menu-out:hover { background: color-mix(in srgb, var(--accent) 12%, var(--surface)); }
+.brand b, .kicker-d, .has3d { color: var(--accent); }
+.message-page .message-intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin: 8px 0 30px;
+}
+.message-intro > div { max-width: 760px; }
+.message-intro h1 {
+  max-width: 17ch;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 0.99;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.message-intro p:not(.kicker-d) { max-width: 58ch; margin-top: 12px; color: var(--muted); }
+.message-browse { flex: none; }
+.inbox-client { gap: 18px; height: min(740px, 76svh); }
+.inbox-client .inbox-list { gap: 9px; }
+.inbox-client .thread { padding: 14px; border-radius: 18px; }
+.inbox-client .thread[aria-current="true"] { border-color: var(--accent); box-shadow: inset 3px 0 var(--accent); }
+.inbox-client .convo { border-radius: 22px; box-shadow: 0 18px 50px -42px var(--ink); }
+.inbox-client .convo-head { padding: 18px 20px; }
+.inbox-client .ch-photo { border-radius: 12px; }
+.inbox-client .convo-team { padding: 10px 20px 14px; border-bottom: 1px solid var(--line); }
+.inbox-client .convo-list { padding: 24px; gap: 14px; background: color-mix(in srgb, var(--bg) 62%, var(--surface)); }
+.inbox-client .bubble { max-width: min(78%, 560px); padding: 12px 16px 9px; border-radius: 16px 16px 16px 5px; }
+.inbox-client .bubble.mine { border-radius: 16px 16px 5px 16px; }
+.inbox-client .convo-form { padding: 14px 16px; }
+.inbox-client .convo-form textarea { min-height: 46px; }
+.inbox-client .inbox-empty { background: var(--surface); border-style: solid; }
+.inbox-client .inbox-list > .inbox-empty { min-height: 320px; }
+.inbox-client .inbox-empty .btn { margin-top: 8px; }
+@media (max-width: 899px) {
+  .message-page .message-intro { align-items: flex-start; flex-direction: column; }
+  .inbox-client { height: auto; }
+  .inbox-client.has-selection .inbox-pane { height: min(700px, 82svh); }
+  .inbox-client .inbox-empty { min-height: 300px; }
+}
+@media (max-width: 520px) {
+  .message-intro h1 { font-size: clamp(2.25rem, 11vw, 3.2rem); }
+  .inbox-client .convo-list { padding: 16px; }
+  .inbox-client .bubble { max-width: 92%; }
+  .message-browse { width: 100%; }
+}

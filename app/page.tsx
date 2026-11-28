@@ -50,7 +50,7 @@ export default async function Home() {
             <h1 className="wordmark" aria-label={SITE.name}>
               Kol<span>é</span>
             </h1>
-            <p className="lede">Walk through Lagos and Abuja&apos;s finest buildings and land in 3D before you visit.</p>
+            <p className="lede">Find a home or plot in Lagos and Abuja. Explore it in 3D, then speak with our team before you visit.</p>
           </div>
         </div>
         <div className="khero-search wrap">

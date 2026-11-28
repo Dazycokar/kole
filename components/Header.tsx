@@ -5,6 +5,7 @@ import { threadsFor } from "@/lib/queries";
 import { SITE } from "@/lib/site";
 import ThemeToggle from "./ThemeToggle";
 import LogoutButton from "./LogoutButton";
+import DismissibleDetails from "./DismissibleDetails";
 
 const LINKS = [
   { href: "/buildings", label: "Buildings" },
@@ -48,7 +49,7 @@ export default async function Header() {
 
       <div className="nav-end">
         {user ? (
-          <details className="acct">
+          <DismissibleDetails className="acct">
             <summary aria-label="Your account">
               <span className="avatar" aria-hidden="true">
                 {user.name.trim().charAt(0).toUpperCase() || "K"}
@@ -62,7 +63,7 @@ export default async function Header() {
               <Link href={messagesHref}>Messages{unread > 0 ? ` (${unread})` : ""}</Link>
               <LogoutButton name={user.name} className="menu-out" />
             </div>
-          </details>
+          </DismissibleDetails>
         ) : (
           <>
             <Link className="pill-btn hide-sm" href="/login">
@@ -74,7 +75,7 @@ export default async function Header() {
           </>
         )}
 
-        <details className="menu">
+        <DismissibleDetails className="menu">
           <summary aria-label="Open menu">Menu</summary>
           <div className="menu-list">
             {LINKS.map((l) => (
@@ -96,7 +97,7 @@ export default async function Header() {
               </>
             )}
           </div>
-        </details>
+        </DismissibleDetails>
         <ThemeToggle />
       </div>
     </header>

@@ -36,6 +36,5 @@ export default function Contact({ searchParams }: { searchParams: { topic?: stri
           </aside>
         </div>
       </div>
-    </main>
-  );
+      </main>  );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import type { ThreadSummary } from "@/lib/types";
 import { timeAgo } from "@/lib/format";
@@ -85,7 +86,7 @@ export default function ChatInbox({ mode, initialThreadId }: Props) {
   const current = threads?.find((t) => t.id === selected);
 
   return (
-    <div className={`inbox${selected ? " has-selection" : ""}`}>
+    <div className={`inbox inbox-${mode}${selected ? " has-selection" : ""}`}>
       <aside className="inbox-list" aria-label="Conversations">
         {mode === "staff" && avail?.agent && (
           <div className="avail">
@@ -101,12 +102,13 @@ export default function ChatInbox({ mode, initialThreadId }: Props) {
         {!threads && !error && <p className="convo-note">Loading…</p>}
         {threads && threads.length === 0 && (
           <div className="inbox-empty">
-            <h3>No conversations yet</h3>
+            <h3>{mode === "client" ? "Your conversations start with a property" : "No conversations yet"}</h3>
             <p>
               {mode === "client"
-                ? "Open a property and use the chat box to ask about it. Your conversations will be listed here."
+                ? "Open a property and choose “Ask Kolé” to start. Your adviser, questions, and useful details will be kept together here."
                 : "When a client asks about one of your properties, the conversation appears here."}
             </p>
+            {mode === "client" && <Link className="btn solid" href="/buildings">Browse homes</Link>}
           </div>
         )}
         {threads?.map((t) => (
@@ -157,8 +159,8 @@ export default function ChatInbox({ mode, initialThreadId }: Props) {
           </>
         ) : (
           <div className="inbox-empty">
-            <h3>Select a conversation</h3>
-            <p>Pick one from the list to read and reply.</p>
+            <h3>{mode === "client" ? "Choose a property conversation" : "Select a conversation"}</h3>
+            <p>{mode === "client" ? "Choose a property on the left to read your adviser’s reply or ask your next question." : "Pick one from the list to read and reply."}</p>
           </div>
         )}
       </section>
