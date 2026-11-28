@@ -9,14 +9,12 @@ npm install
 npm run dev        # http://localhost:3000
 ```
 
-For local environment variables, copy `.env.example` to `.env.local` in the project root and fill in the values you use. Restart `npm run dev` after changing `.env.local`; the server reads several settings, including database configuration, when it starts. `.env.local` is ignored by Git and is not deployed to Vercel. For Vercel, set variables in the project's **Settings > Environment Variables**, then redeploy.
 
-For production: `npm run build` then `npm start`.
 
 ## Who can do what
 
 - **Buyers** sign up at `/register` (free) and log in at `/login`. Their dashboard (`/dashboard`) shows their saved shortlist, their chats with the Kolé team, and their details and password.
-- **The Kolé team (admin)** logs in with `admin@kole.local` / `ChangeMe123!` (change both in `.env.local` before going live). The team dashboard at `/admin` is where you add and edit properties, add the developers you work with, answer buyer chats, see all buyers and what they saved, and handle partner requests.
+- **The Kolé team (admin)**  The team dashboard at `/admin` is where you add and edit properties, add the developers you work with, answer buyer chats, see all buyers and what they saved, and handle partner requests.
 - **Developers** never log in. They open `/partner` and send a request. You add them under Admin > Developers, then pick them when you add a property. Their phone and email stay private to the team.
 
 ## What is in it
@@ -31,30 +29,9 @@ For production: `npm run build` then `npm start`.
 
 - **Storage.** The database is Supabase Postgres (set `DATABASE_URL`). Everything (listings, accounts, chats, contact messages) lives there. Photos, 360 photos and videos live in Supabase Storage (set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`). Without them the site falls back to `data/` on your own computer. On Vercel without a database it still opens, but shows a warning in the admin area because Vercel's disk is wiped.
 
-## Set up Supabase (5 minutes)
 
-1. Create a project at supabase.com.
-2. Project Settings, then Database, then Connection string, then **Transaction pooler**. Copy it into `DATABASE_URL` (put your database password in).
-3. Project Settings, then API: copy the Project URL into `SUPABASE_URL` and the **service_role** key into `SUPABASE_SERVICE_ROLE_KEY`. This key is a secret: keep it only in `.env` or Vercel, never in the mobile apps.
-4. Start the site. The tables are created on the first visit, row level security is switched on for them, and the public `kole-media` bucket is created for you. (`supabase/schema.sql` is there if you prefer to run the SQL yourself.)
-5. Videos upload straight from the browser to Supabase Storage, so Vercel's 4.5 MB limit does not apply. Supabase's free plan allows 50 MB per file; set `KOLE_MAX_VIDEO_MB` to match your plan (and raise the limit in Supabase, Storage, Settings).
 
-Tip for clear videos: export from your phone or editor as MP4 (H.264), 1080p, landscape, around 8 to 12 Mbit/s. That stays sharp and fits 50 MB for about 40 seconds. For a longer tour, upload two or three clips.
 
-## Email (SMTP)
-
-Set `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` and `CONTACT_TO` (see `.env.example`). Messages from the Contact page (website and app) are always saved in Admin, then Contact, and are also emailed to `CONTACT_TO`; the sender gets a short receipt. With no `SMTP_HOST` the site still works and just skips the email. Contact details and office hours on the page come from `CONTACT_EMAIL`, `CONTACT_PHONE`, `CONTACT_WHATSAPP`, `CONTACT_ADDRESS` and `CONTACT_HOURS`.
-
-## Deploy on Vercel
-
-The "Application error ... Digest" page on Vercel came from the site trying to write files to Vercel's read-only disk. Fix:
-
-1. Do the Supabase steps above.
-2. In Vercel, Settings, then Environment Variables, add everything from `.env.example` that you use (at least `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and the SMTP ones).
-3. Redeploy. The tables and sample listings are created on the first visit.
-4. Set `SITE_URL` to your public HTTPS domain to use email-based password resets.
-
-Photos are shrunk in the browser before upload; videos are not touched, so they keep their full quality.
 
 ## Sign-up and login
 
@@ -70,7 +47,6 @@ Every listing with two or more photos gets the 3D view: large photos in depth, a
 
 Admin, then Teams: create teams (for example "Ikoyi Desk", "Abuja Desk"), list the areas each covers, and add members with their own logins. A new enquiry goes to the team covering the property's area (otherwise the least busy team). Buyers see the team name on the chat, on each reply and under "Teams attending to you" on their dashboard. Team members see only their own team's chats; the admin sees all and can move a chat to another team from the conversation.
 - 18 sample listings and 4 sample developers are included, marked "Sample". Remove them in the team dashboard with "Remove sample data".
-- Sample photos are Unsplash stand-ins. Replace them with real ones.
 - The site takes no payments. The "checked" ticks only mean something if the team has really seen the documents.
 - Fonts load from Google Fonts, so the first build needs internet.
 
